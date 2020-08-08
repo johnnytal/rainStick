@@ -42,38 +42,38 @@ function readVisherAccel(event){
 			rainstick.tint = 0xfff00f;
 		}
 		
-		rainstick1Sfx._sound.playbackRate.value = pbValue + 0.2;
-		rainstick1Sfx.volume = pbValue + 0.1;
+		rainstick1Sfx._sound.playbackRate.value = pbValue + 0.1;
+		rainstick1Sfx.volume = pbValue;
 		MIDDLE_STATE = false;
 		
-	    emitter.minParticleScale = pbValue - 0.1;
-    	emitter.maxParticleScale = pbValue + 0.3;
+	    emitter.minParticleScale = pbValue - 0.2;
+    	emitter.maxParticleScale = pbValue + 0.1;
 		
 	}
 	
 	else if (AccelY > 4){
 		if (!rainstick2Sfx.isPlaying && MIDDLE_STATE){
 			rainstick2Sfx.play();
-			rainstick2Sfx.volume = pbValue + 0.1;
+			rainstick2Sfx.volume = pbValue;
 			rainstick.tint = 0xf55fff;
 		}
-		rainstick2Sfx._sound.playbackRate.value = pbValue + 0.2;
+		rainstick2Sfx._sound.playbackRate.value = pbValue + 0.1;
 		MIDDLE_STATE = false;
 		
-	    emitter.minParticleScale = pbValue - 0.1;
-    	emitter.maxParticleScale = pbValue + 0.3;
+	    emitter.minParticleScale = pbValue - 0.2;
+    	emitter.maxParticleScale = pbValue + 0.1;
 
 	}
 	
-	else if (AccelY > -2  && AccelY < 2){
+	else if (AccelY > -3  && AccelY < 3){
 		MIDDLE_STATE = true;
 		rainstick.tint = 0xffffff;
 		
 		if (rainstick2Sfx.isPlaying){
-			rainstick2Sfx.fadeOut(600);
+			rainstick2Sfx.fadeOut(1500);
 		}
 		else if (rainstick1Sfx.isPlaying){
-			rainstick1Sfx.fadeOut(600);
+			rainstick1Sfx.fadeOut(1500);
 		}
 	}
   
