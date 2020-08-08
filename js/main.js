@@ -5,8 +5,8 @@ var gameMain = function(game){
 
 gameMain.prototype = {
     create: function(){  
-		rainstick1Sfx = game.add.audio('rainstick1', 1, false);
-		rainstick2Sfx = game.add.audio('rainstick2', 1, false);
+		rainstick1Sfx = game.add.audio('rainStick1', 1, false);
+		rainstick2Sfx = game.add.audio('rainStick2', 1, false);
 		
 		bgHot = game.add.image(0, 0, 'gradientHot');
 		bgCold = game.add.image(0, 0, 'gradientCold');
@@ -49,7 +49,9 @@ function readVisherAccel(event){
 		MIDDLE_STATE = true;
 	}
   
-	rainstick.angle = Math.abs(AccelY) * 18;
+	//rainstick.angle = Math.abs(AccelY) * 18;
+	
+	rainstick.tint = 0xffffff * Math.abs(AccelY) / 20;
 	
 	var alphaVal = (AccelY + 10) / 20;
 	if (alphaVal < 0) alphaVal = 0;
