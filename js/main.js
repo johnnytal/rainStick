@@ -21,6 +21,14 @@ gameMain.prototype = {
         create_rain();
              	
     	window.addEventListener("devicemotion", readVisherAccel, true);
+    	
+    	setTimeout(function(){
+    		//initAd();
+    		
+	        try{
+	            window.plugins.insomnia.keepAwake();
+	        } catch(e){}   
+		}, 100);
     },
 	update: function(){}
 };
@@ -28,31 +36,40 @@ gameMain.prototype = {
 
 function readVisherAccel(event){
 	AccelY = event.accelerationIncludingGravity.y;
+	pbValue = Math.abs(AccelY) / 10;
 	
 	if (AccelY < -4){
 		if (!rainstick1Sfx.isPlaying && MIDDLE_STATE){
 			rainstick1Sfx.play();
+			rainstick.tint = 0xfff00f;
 		}
-		rainstick1Sfx._sound.playbackRate.value = Math.abs(AccelY) / 10;
+		
+		rainstick1Sfx._sound.playbackRate.value = pbValue;
 		MIDDLE_STATE = false;
+		
+	    emitter.minParticleScale = pbValue - 0.1;
+    	emitter.maxParticleScale = pbValue + 0.3;
+		
 	}
 	
 	else if (AccelY > 4){
 		if (!rainstick2Sfx.isPlaying && MIDDLE_STATE){
 			rainstick2Sfx.play();
+			rainstick.tint = 0xf55fff;
 		}
-		rainstick2Sfx._sound.playbackRate.value = Math.abs(AccelY) / 10;
+		rainstick2Sfx._sound.playbackRate.value = pbValue;
 		MIDDLE_STATE = false;
+		
+	    emitter.minParticleScale = pbValue - 0.1;
+    	emitter.maxParticleScale = pbValue + 0.3;
+
 	}
 	
 	else if (AccelY > -2  && AccelY < 2){
 		MIDDLE_STATE = true;
+		rainstick.tint = 0xffffff;
 	}
   
-	//rainstick.angle = Math.abs(AccelY) * 18;
-	
-	rainstick.tint = 0xffffff * Math.abs(AccelY) / 20;
-	
 	var alphaVal = (AccelY + 10) / 20;
 	if (alphaVal < 0) alphaVal = 0;
 	else if (alphaVal > 1) alphaVal = 1;
@@ -79,4 +96,16 @@ function create_rain(){
     emitter.maxRotation = 0;
 
     emitter.start(false, 1600, 5, 0);
+}
+
+function initAd(){
+	admobid = {
+    	banner: '',
+    };
+    
+    if(AdMob) AdMob.createBanner({
+	    adId: admobid.banner,
+	    position: AdMob.AD_POSITION.TOP_CENTER,
+    	autoShow: true 
+	});
 }
