@@ -68,13 +68,6 @@ function readVisherAccel(event){
 	else if (AccelY > -3  && AccelY < 3){
 		MIDDLE_STATE = true;
 		rainstick.tint = 0xffffff;
-		
-		if (rainstick2Sfx.isPlaying){
-			rainstick2Sfx.fadeOut(1500);
-		}
-		else if (rainstick1Sfx.isPlaying){
-			rainstick1Sfx.fadeOut(1500);
-		}
 	}
   
 	var alphaVal = (AccelY + 11) / 20;
