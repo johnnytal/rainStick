@@ -49,7 +49,7 @@ function readVisherAccel(event){
 		MIDDLE_STATE = true;
 	}
   
-	rainstick.angle = Math.abs(AccelY) / 10 * 18;
+	rainstick.angle = Math.abs(AccelY) * 18;
 	
 	var alphaVal = (AccelY + 10) / 20;
 	if (alphaVal < 0) alphaVal = 0;
