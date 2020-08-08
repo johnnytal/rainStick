@@ -3,7 +3,6 @@ var preloader = function(game){};
 preloader.prototype = {
     preload: function(){ 
         this.game.load.image('rain', 'assets/images/rain.png');
-        this.game.load.image('rainstick', 'assets/images/rainstick.png');
         this.game.load.image('didgeridoo', 'assets/images/didgeridoo.png');
         game.load.image('gradientHot', 'assets/images/color-gradient-background.jpg');
         game.load.image('gradientCold', 'assets/images/color-gradient-background_cold.jpg');

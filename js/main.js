@@ -10,10 +10,8 @@ gameMain.prototype = {
 		
 		bgHot = game.add.image(0, 0, 'gradientHot');
 		bgCold = game.add.image(0, 0, 'gradientCold');
-
         
         rainstick = game.add.sprite(0, 0, 'didgeridoo');
-        rainstick.scale.set(.65, .65);
         rainstick.anchor.set(.5, .5);
         rainstick.x = game.world.centerX;
         rainstick.y = game.world.centerY;
@@ -44,7 +42,8 @@ function readVisherAccel(event){
 			rainstick.tint = 0xfff00f;
 		}
 		
-		rainstick1Sfx._sound.playbackRate.value = pbValue;
+		rainstick1Sfx._sound.playbackRate.value = pbValue + 0.2;
+		rainstick1Sfx.volume = pbValue + 0.1;
 		MIDDLE_STATE = false;
 		
 	    emitter.minParticleScale = pbValue - 0.1;
@@ -55,9 +54,10 @@ function readVisherAccel(event){
 	else if (AccelY > 4){
 		if (!rainstick2Sfx.isPlaying && MIDDLE_STATE){
 			rainstick2Sfx.play();
+			rainstick2Sfx.volume = pbValue + 0.1;
 			rainstick.tint = 0xf55fff;
 		}
-		rainstick2Sfx._sound.playbackRate.value = pbValue;
+		rainstick2Sfx._sound.playbackRate.value = pbValue + 0.2;
 		MIDDLE_STATE = false;
 		
 	    emitter.minParticleScale = pbValue - 0.1;
@@ -68,14 +68,21 @@ function readVisherAccel(event){
 	else if (AccelY > -2  && AccelY < 2){
 		MIDDLE_STATE = true;
 		rainstick.tint = 0xffffff;
+		
+		if (rainstick2Sfx.isPlaying){
+			rainstick2Sfx.fadeOut(600);
+		}
+		else if (rainstick1Sfx.isPlaying){
+			rainstick1Sfx.fadeOut(600);
+		}
 	}
   
-	var alphaVal = (AccelY + 10) / 20;
+	var alphaVal = (AccelY + 11) / 20;
 	if (alphaVal < 0) alphaVal = 0;
 	else if (alphaVal > 1) alphaVal = 1;
 	
-	bgHot.alpha = alphaVal - 0.2;
-	bgCold.alpha = 1 - alphaVal - 0.2;
+	bgHot.alpha = alphaVal;
+	bgCold.alpha = 1 - alphaVal;
 }
 
 function create_rain(){
