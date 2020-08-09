@@ -7,7 +7,7 @@ var gameMain = function(game){
 	TINT1 = 0xfff00f;
 	TINT2 = 0xf55fff;
 	
-	chosen_stick = 0;
+	chosen_stick = 1;
 };
 
 gameMain.prototype = {
@@ -68,7 +68,7 @@ gameMain.prototype = {
         }, this);
     	
     	setTimeout(function(){
-    		//initAd();
+    		initAd();
 			try{
                 StatusBar.hide();
             } catch(e){} 
@@ -110,8 +110,10 @@ function readVisherAccel(event){
 		playingFile.volume = pbValue;
 	}catch(e){}
 	
-    emitter.minParticleScale = pbValue - 0.1;
-	emitter.maxParticleScale = pbValue + 0.1;
+    emitter.minParticleScale = 0.1 + pbValue;
+	emitter.maxParticleScale = 0.3 + pbValue;
+	
+ 	emitter.setYSpeed(450 + (AccelY * 25), 750 + (AccelY * 25));
   
 	var alphaVal = (AccelY + 11) / 20;
 	if (alphaVal < 0) alphaVal = 0;
@@ -162,18 +164,18 @@ function create_rain(){
 }
 
 function loadSounds(){
-	stick1a = game.add.audio('stick1a', 1, false);
-	stick1b = game.add.audio('stick1b', 1, false);
+	stick1a = game.add.audio('stick1a', 0.8, false);
+	stick1b = game.add.audio('stick1b', 0.8, false);
 	
-	stick1 = [stick1a, stick1b, 0xffffff];
+	stick1 = [stick1a, stick1b, 0x000ff0];
 	
-	stick2a = game.add.audio('stick2a', 1, false);
-	stick2b = game.add.audio('stick2b', 1, false);
+	stick2a = game.add.audio('stick2a', 0.8, false);
+	stick2b = game.add.audio('stick2b', 0.8, false);
 	
-	stick2 = [stick2a, stick2b, 0x000ff0];
+	stick2 = [stick2a, stick2b, 0xffffff];
 	
-	stick3a = game.add.audio('stick3a', 1, false);
-	stick3b = game.add.audio('stick3b', 1, false);
+	stick3a = game.add.audio('stick3a', 0.8, false);
+	stick3b = game.add.audio('stick3b', 0.8, false);
 	
 	stick3 = [stick3a, stick3b, 0x00ff22];
 	
@@ -196,9 +198,13 @@ function initAd(){
 
 function pleasepleaseMe(){
 	setTimeout(function(){
-   		pleaseText = game.add.text(0, 0, 'If you like it, a positive review will be appreciated :)', {
+   		pleaseText = game.add.text(0, 0, 'If you like it, a positive\nreview will be appreciated :)', {
         	font: '22px', fill: 'lightgrey', align: 'center'
    		});
+   		
+   		pleaseText.anchor.set(.5, .5);
+        pleaseText.x = game.world.centerX;
+        pleaseText.y = game.world.centerY - 150;
    		
    		pleaseText.alpha = 0;
 		game.add.tween(pleaseText).to( { alpha: 1 }, 1500, "Linear", true);
