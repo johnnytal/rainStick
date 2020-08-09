@@ -36,4 +36,9 @@ boot.prototype = {
 };
 
 function onPause(){game.paused = true;}
-function onResume(){game.paused = false;}
+function onResume(){
+	game.paused = false; 		
+	try{
+        StatusBar.hide();
+    } catch(e){} 
+}

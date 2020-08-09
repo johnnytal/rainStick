@@ -26,6 +26,9 @@ gameMain.prototype = {
     	instText = game.add.text(0, 0, 'Tilt your device to play\nTap the rainstick to change sounds\nTap the screen to toggle nature sfx', {
         	font: '22px', fill: 'lightgrey', align: 'center'
    		});
+   		
+		pleasepleaseMe();
+
 
    		instText.anchor.set(.5, .5);
         instText.x = game.world.centerX;
@@ -67,7 +70,9 @@ gameMain.prototype = {
     	
     	setTimeout(function(){
     		//initAd();
-    		
+			try{
+                StatusBar.hide();
+            } catch(e){} 
 	        try{
 	            window.plugins.insomnia.keepAwake();
 	        } catch(e){}   
@@ -89,15 +94,15 @@ function readVisherAccel(event){
 		if (sticks[chosen_stick][0].isPlaying) sticks[chosen_stick][0].stop();
 	}
 	
-	if (AccelY < -3.5){
+	if (AccelY < -4){
 		playFile(TINT1);
 	}
 	
-	else if (AccelY > 3.5){
+	else if (AccelY > 4){
 		playFile(TINT2);
 	}
 	
-	else if (AccelY > -3.5 && AccelY < 3.5){
+	else if (AccelY > -4 && AccelY < 4){
 		MIDDLE = true;
 		rainstick.tint = 0xffffff;
 	}
@@ -123,7 +128,7 @@ function playFile(_tint){
 		rainstick.tint = _tint;
 	}	
 			
-	playingFile._sound.playbackRate.value = pbValue + 0.1;
+	playingFile._sound.playbackRate.value = pbValue;
 	
 	MIDDLE = false;
 }
@@ -175,7 +180,7 @@ function loadSounds(){
 	
 	sticks = [stick1, stick2, stick3];
 	
-	ambientSfx = game.add.audio('ambient', 0.6, true);
+	ambientSfx = game.add.audio('ambient', 1, true);
 }
 
 function initAd(){
@@ -188,4 +193,45 @@ function initAd(){
 	    position: AdMob.AD_POSITION.BOTTOM_CENTER,
     	autoShow: true 
 	});
+}
+
+function pleaseplaseMe(){
+	setTimeout(function(){
+   		pleaseText = game.add.text(0, 0, 'If you like it, a positive review will be appreciated :)', {
+        	font: '22px', fill: 'lightgrey', align: 'center'
+   		});
+   		
+   		pleaseText.alpha = 0;
+		game.add.tween(pleaseText).to( { alpha: 1 }, 1500, "Linear", true);
+		
+		setTimeout(function(){
+			game.add.tween(pleaseText).to( { alpha: 0 }, 1500, "Linear", true);
+		}, 5000);
+	}, 60000);
+	
+	setTimeout(function(){
+   		pleaseText = game.add.text(0, 0, "Don't forget to check out\nmore apps by iLyichArts! :)", {
+        	font: '22px', fill: 'lightgrey', align: 'center'
+   		});
+   		
+   		pleaseText.alpha = 0;
+		game.add.tween(pleaseText).to( { alpha: 1 }, 1500, "Linear", true);
+		
+		setTimeout(function(){
+			game.add.tween(pleaseText).to( { alpha: 0 }, 1500, "Linear", true);
+		}, 5000);
+	}, 120000);
+	
+	setTimeout(function(){
+   		pleaseText = game.add.text(0, 0, "Wow! You should consider\ndoing that for a living!", {
+        	font: '22px', fill: 'lightgrey', align: 'center'
+   		});
+   		
+   		pleaseText.alpha = 0;
+		game.add.tween(pleaseText).to( { alpha: 1 }, 1500, "Linear", true);
+		
+		setTimeout(function(){
+			game.add.tween(pleaseText).to( { alpha: 0 }, 1500, "Linear", true);
+		}, 5000);
+	}, 240000);
 }
