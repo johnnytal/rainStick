@@ -29,7 +29,6 @@ gameMain.prototype = {
    		
 		pleasepleaseMe();
 
-
    		instText.anchor.set(.5, .5);
         instText.x = game.world.centerX;
         instText.y = game.world.centerY - 150;
@@ -195,7 +194,7 @@ function initAd(){
 	});
 }
 
-function pleaseplaseMe(){
+function pleasepleaseMe(){
 	setTimeout(function(){
    		pleaseText = game.add.text(0, 0, 'If you like it, a positive review will be appreciated :)', {
         	font: '22px', fill: 'lightgrey', align: 'center'
