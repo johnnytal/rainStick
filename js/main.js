@@ -6,24 +6,64 @@ var gameMain = function(game){
 	
 	TINT1 = 0xfff00f;
 	TINT2 = 0xf55fff;
+	
+	chosen_stick = 0;
 };
 
 gameMain.prototype = {
-    create: function(){  
-		rainstick1Sfx = game.add.audio('rainStick1', 1, false);
-		rainstick2Sfx = game.add.audio('rainStick2', 1, false);
-		
+    create: function(){  	
 		bgHot = game.add.image(0, 0, 'gradientHot');
 		bgCold = game.add.image(0, 0, 'gradientCold');
-        
+
         rainstick = game.add.sprite(0, 0, 'didgeridoo');
+        rainstick.alpha = 0;
         rainstick.anchor.set(.5, .5);
         rainstick.x = game.world.centerX;
         rainstick.y = game.world.centerY;
+        rainstick.inputEnabled = true;
+        rainstick.events.onInputDown.add(changeRain, this);
+        
+    	instText = game.add.text(0, 0, 'Tilt your device to play\nTap the rainstick to change sounds\nTap the screen to toggle nature sfx', {
+        	font: '22px', fill: 'lightgrey', align: 'center'
+   		});
+
+   		instText.anchor.set(.5, .5);
+        instText.x = game.world.centerX;
+        instText.y = game.world.centerY - 150;
+
+   		instText.alpha = 0;
+   		
+   		setTimeout(function(){
+			game.add.tween(rainstick).to( { alpha: 1 }, 3500, "Linear", true);
+			tween = game.add.tween(instText).to( { alpha: 1 }, 1500, "Linear", true);
+   		}, 1000);
+
+   		setTimeout(function(){
+   			 tween = game.add.tween(instText).to( { alpha: 0 }, 2500, "Linear", true);
+   			 
+   			 tween.onComplete.add(function(){
+   			 	instText.destroy();
+   			 }, this);
+   		}, 7500);
+   		
         
         create_rain();
              	
     	window.addEventListener("devicemotion", readVisherAccel, true);
+    	
+    	loadSounds();
+    	
+    	ambientSfx.play();
+        
+        bgHot.inputEnabled = true;
+        bgHot.events.onInputDown.add(function(){
+        	if (ambientSfx.isPlaying){
+        		ambientSfx.stop();
+        	}
+        	else{
+        		ambientSfx.play();
+        	}
+        }, this);
     	
     	setTimeout(function(){
     		//initAd();
@@ -32,8 +72,7 @@ gameMain.prototype = {
 	            window.plugins.insomnia.keepAwake();
 	        } catch(e){}   
 		}, 100);
-    },
-	update: function(){}
+    }
 };
 
 
@@ -42,12 +81,12 @@ function readVisherAccel(event){
 	pbValue = Math.abs(AccelY) / 10;
 	
 	if (AccelY < 0){
-		playingFile = rainstick1Sfx;
-		if (rainstick2Sfx.isPlaying) rainstick2Sfx.stop();
+		playingFile = sticks[chosen_stick][0];
+		if (sticks[chosen_stick][1].isPlaying) sticks[chosen_stick][1].stop();
 	}
 	else if (AccelY > 0){
-		playingFile = rainstick2Sfx;
-		if (rainstick1Sfx.isPlaying) rainstick1Sfx.stop();
+		playingFile = sticks[chosen_stick][1];
+		if (sticks[chosen_stick][0].isPlaying) sticks[chosen_stick][0].stop();
 	}
 	
 	if (AccelY < -3.5){
@@ -63,10 +102,12 @@ function readVisherAccel(event){
 		rainstick.tint = 0xffffff;
 	}
 	
-	playingFile.volume = pbValue;
-				
-    emitter.minParticleScale = pbValue - 0.2;
-	emitter.maxParticleScale = pbValue;
+	try{
+		playingFile.volume = pbValue;
+	}catch(e){}
+	
+    emitter.minParticleScale = pbValue - 0.1;
+	emitter.maxParticleScale = pbValue + 0.1;
   
 	var alphaVal = (AccelY + 11) / 20;
 	if (alphaVal < 0) alphaVal = 0;
@@ -87,12 +128,13 @@ function playFile(_tint){
 	MIDDLE = false;
 }
 
-function fadeOut(){
-	if (playingFile.volume > 0){
-		playingFile.volume -= 0.04;
-		
-		fadeOut();
-	}
+function changeRain(){
+	chosen_stick++;
+	if (chosen_stick == 3) chosen_stick = 0;
+	
+	emitter.forEach(function(particle) {  
+		particle.tint = sticks[chosen_stick][2];
+	});
 }
 
 function create_rain(){
@@ -113,6 +155,27 @@ function create_rain(){
     emitter.maxRotation = 0;
 
     emitter.start(false, 1600, 5, 0);
+}
+
+function loadSounds(){
+	stick1a = game.add.audio('stick1a', 1, false);
+	stick1b = game.add.audio('stick1b', 1, false);
+	
+	stick1 = [stick1a, stick1b, 0xffffff];
+	
+	stick2a = game.add.audio('stick2a', 1, false);
+	stick2b = game.add.audio('stick2b', 1, false);
+	
+	stick2 = [stick2a, stick2b, 0x000ff0];
+	
+	stick3a = game.add.audio('stick3a', 1, false);
+	stick3b = game.add.audio('stick3b', 1, false);
+	
+	stick3 = [stick3a, stick3b, 0x00ff22];
+	
+	sticks = [stick1, stick2, stick3];
+	
+	ambientSfx = game.add.audio('ambient', 0.6, true);
 }
 
 function initAd(){
