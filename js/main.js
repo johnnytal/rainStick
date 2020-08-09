@@ -1,6 +1,11 @@
 var gameMain = function(game){
 	emitter = null;
 	MIDDLE = true;
+	
+	playingFile = null;
+	
+	TINT1 = 0xfff00f;
+	TINT2 = 0xf55fff;
 };
 
 gameMain.prototype = {
@@ -36,40 +41,27 @@ function readVisherAccel(event){
 	AccelY = event.accelerationIncludingGravity.y;
 	pbValue = Math.abs(AccelY) / 10;
 	
-	if (AccelY < -4){
-		if (!rainstick1Sfx.isPlaying && MIDDLE){
-			rainstick1Sfx.play();
-			rainstick.tint = 0xfff00f;
-		}
+	if (AccelY < -3.5){
+		playingFile = rainstick1Sfx;
+		if (rainstick2Sfx.isPlaying) rainstick2Sfx.stop();
 		
-		if (rainstick2Sfx.isPlaying){
-			rainstick2Sfx.stop();
-		}
-		
-		rainstick1Sfx._sound.playbackRate.value = pbValue;
-		rainstick1Sfx.volume = pbValue;
-		
-		MIDDLE = false;
+		playFile(TINT1);
 	}
 	
-	else if (AccelY > 4){
-		if (!rainstick2Sfx.isPlaying && MIDDLE){
-			rainstick2Sfx.play();
-			rainstick.tint = 0xf55fff;
-		}
+	else if (AccelY > 3.5){
+		playingFile = rainstick2Sfx;
+		if (rainstick1Sfx.isPlaying) rainstick1Sfx.stop();
 		
-		if (rainstick1Sfx.isPlaying){
-			rainstick1Sfx.stop();
-		}
-		
-		rainstick2Sfx._sound.playbackRate.value = pbValue;
-		rainstick2Sfx.volume = pbValue;
-		
-		MIDDLE = false;
+		playFile(TINT2);
 	}
 	
-	else if (AccelY > -4 && AccelY < 4){
+	else if (AccelY > -3.5 && AccelY < 3.5){
 		MIDDLE = true;
+		if (playingFile != null){
+			if (playingFile.isPlaying){
+				fadeOut();	
+			}
+		}
 	}
 				
     emitter.minParticleScale = pbValue - 0.2;
@@ -81,6 +73,26 @@ function readVisherAccel(event){
 	
 	bgHot.alpha = alphaVal;
 	bgCold.alpha = 1 - alphaVal;
+}
+
+function playFile(_tint){
+	if (!playingFile.isPlaying && MIDDLE){
+		playingFile.play();
+		rainstick.tint = _tint;
+	}	
+			
+	playingFile._sound.playbackRate.value = pbValue + 0.1;
+	playingFile.volume = pbValue - 0.1;
+	
+	MIDDLE = false;
+}
+
+function fadeOut(){
+	if (playingFile.volume > 0){
+		playingFile.volume -= 0.04;
+		
+		fadeOut();
+	}
 }
 
 function create_rain(){
