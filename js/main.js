@@ -41,28 +41,29 @@ function readVisherAccel(event){
 	AccelY = event.accelerationIncludingGravity.y;
 	pbValue = Math.abs(AccelY) / 10;
 	
-	if (AccelY < -3.5){
+	if (AccelY < 0){
 		playingFile = rainstick1Sfx;
 		if (rainstick2Sfx.isPlaying) rainstick2Sfx.stop();
-		
+	}
+	else if (AccelY > 0){
+		playingFile = rainstick2Sfx;
+		if (rainstick1Sfx.isPlaying) rainstick1Sfx.stop();
+	}
+	
+	if (AccelY < -3.5){
 		playFile(TINT1);
 	}
 	
 	else if (AccelY > 3.5){
-		playingFile = rainstick2Sfx;
-		if (rainstick1Sfx.isPlaying) rainstick1Sfx.stop();
-		
 		playFile(TINT2);
 	}
 	
 	else if (AccelY > -3.5 && AccelY < 3.5){
 		MIDDLE = true;
-		if (playingFile != null){
-			if (playingFile.isPlaying){
-				fadeOut();	
-			}
-		}
+		rainstick.tint = 0xffffff;
 	}
+	
+	playingFile.volume = pbValue;
 				
     emitter.minParticleScale = pbValue - 0.2;
 	emitter.maxParticleScale = pbValue;
@@ -82,7 +83,6 @@ function playFile(_tint){
 	}	
 			
 	playingFile._sound.playbackRate.value = pbValue + 0.1;
-	playingFile.volume = pbValue - 0.1;
 	
 	MIDDLE = false;
 }
