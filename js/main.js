@@ -1,5 +1,4 @@
 var gameMain = function(game){
-	MIDDLE_STATE = false;
 	emitter = null;
 };
 
@@ -36,39 +35,36 @@ function readVisherAccel(event){
 	AccelY = event.accelerationIncludingGravity.y;
 	pbValue = Math.abs(AccelY) / 10;
 	
-	if (AccelY < -4){
-		if (!rainstick1Sfx.isPlaying && MIDDLE_STATE){
+	if (AccelY < 0){
+		if (!rainstick1Sfx.isPlaying){
 			rainstick1Sfx.play();
 			rainstick.tint = 0xfff00f;
 		}
 		
-		rainstick1Sfx._sound.playbackRate.value = pbValue + 0.1;
-		rainstick1Sfx.volume = pbValue;
-		MIDDLE_STATE = false;
+		if (rainstick2Sfx.isPlaying){
+			rainstick2Sfx.stop();
+		}
 		
-	    emitter.minParticleScale = pbValue - 0.2;
-    	emitter.maxParticleScale = pbValue + 0.1;
-		
+		rainstick1Sfx._sound.playbackRate.value = pbValue;
+		rainstick1Sfx.volume = pbValue;		
 	}
 	
-	else if (AccelY > 4){
-		if (!rainstick2Sfx.isPlaying && MIDDLE_STATE){
+	else if (AccelY > 0){
+		if (!rainstick2Sfx.isPlaying){
 			rainstick2Sfx.play();
-			rainstick2Sfx.volume = pbValue;
 			rainstick.tint = 0xf55fff;
 		}
-		rainstick2Sfx._sound.playbackRate.value = pbValue + 0.1;
-		MIDDLE_STATE = false;
 		
-	    emitter.minParticleScale = pbValue - 0.2;
-    	emitter.maxParticleScale = pbValue + 0.1;
-
+		if (rainstick1Sfx.isPlaying){
+			rainstick1Sfx.stop();
+		}
+		
+		rainstick2Sfx._sound.playbackRate.value = pbValue;
+		rainstick2Sfx.volume = pbValue;
 	}
-	
-	else if (AccelY > -3  && AccelY < 3){
-		MIDDLE_STATE = true;
-		rainstick.tint = 0xffffff;
-	}
+				
+    emitter.minParticleScale = pbValue - 0.2;
+	emitter.maxParticleScale = pbValue;
   
 	var alphaVal = (AccelY + 11) / 20;
 	if (alphaVal < 0) alphaVal = 0;
@@ -100,12 +96,12 @@ function create_rain(){
 
 function initAd(){
 	admobid = {
-    	banner: '',
+    	banner: 'ca-app-pub-9795366520625065/7747373408'
     };
     
     if(AdMob) AdMob.createBanner({
 	    adId: admobid.banner,
-	    position: AdMob.AD_POSITION.TOP_CENTER,
+	    position: AdMob.AD_POSITION.BOTTOM_CENTER,
     	autoShow: true 
 	});
 }

@@ -1,4 +1,6 @@
 document.addEventListener("deviceready", start, false);
+document.addEventListener("pause", onPause, false);
+document.addEventListener("resume", onResume, false);
 //window.onload = start;
 
 function start(){
@@ -33,4 +35,5 @@ boot.prototype = {
     }
 };
 
-
+function onPause(){game.paused = true;}
+function onResume(){game.paused = false;}
