@@ -1,5 +1,6 @@
 var gameMain = function(game){
 	emitter = null;
+	MIDDLE = true;
 };
 
 gameMain.prototype = {
@@ -35,8 +36,8 @@ function readVisherAccel(event){
 	AccelY = event.accelerationIncludingGravity.y;
 	pbValue = Math.abs(AccelY) / 10;
 	
-	if (AccelY < 0){
-		if (!rainstick1Sfx.isPlaying){
+	if (AccelY < -4){
+		if (!rainstick1Sfx.isPlaying && MIDDLE){
 			rainstick1Sfx.play();
 			rainstick.tint = 0xfff00f;
 		}
@@ -46,11 +47,13 @@ function readVisherAccel(event){
 		}
 		
 		rainstick1Sfx._sound.playbackRate.value = pbValue;
-		rainstick1Sfx.volume = pbValue;		
+		rainstick1Sfx.volume = pbValue;
+		
+		MIDDLE = false;
 	}
 	
-	else if (AccelY > 0){
-		if (!rainstick2Sfx.isPlaying){
+	else if (AccelY > 4){
+		if (!rainstick2Sfx.isPlaying && MIDDLE){
 			rainstick2Sfx.play();
 			rainstick.tint = 0xf55fff;
 		}
@@ -61,6 +64,12 @@ function readVisherAccel(event){
 		
 		rainstick2Sfx._sound.playbackRate.value = pbValue;
 		rainstick2Sfx.volume = pbValue;
+		
+		MIDDLE = false;
+	}
+	
+	else if (AccelY > -4 && AccelY < 4){
+		MIDDLE = true;
 	}
 				
     emitter.minParticleScale = pbValue - 0.2;
