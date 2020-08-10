@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-	<widget id="phonegap.ilyich.rainstick" version="1.00" android-versionCode="10000" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-		<name>RainStick</name>
+	<widget id="phonegap.ilyich.rainstick" version="1.01" android-versionCode="10001" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+		<name>Real Rainstick</name>
 		<description>a rainstick instrument</description>
 		<author email="johnnytal9@gmail.com" href="http://www.ilyichgames.com"> Johnny Tal </author>
 		<content src="index.html"/>
